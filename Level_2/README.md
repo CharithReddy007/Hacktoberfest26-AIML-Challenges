@@ -9,7 +9,7 @@ Put your work in **`Level_2/<your-github-username>/`**. Full task description is
 - Loss curves for three learning rates, plus your predictions for each before you ran them
 - `analysis.md`: your error analysis (3 examples the model gets wrong, one hypothesis, one test of it)
 - A short **Jupyter notebook that teaches** your model step by step to someone who has never seen it
-- NumPy, pandas and matplotlib are allowed. scikit-learn’s models and optimizers are not. You must write the gradient and the update step yourself. Pure python is acceptable as well.
+- NumPy, pandas and matplotlib are allowed. scikit-learn’s models and optimizers are not. You must write the gradient and the update step yourself. Pure python is acceptable
 
 ## Data
 
