@@ -51,3 +51,21 @@ def test_split_invalid_test_size_raises(bad):
 def test_split_length_mismatch_raises():
     with pytest.raises(ValueError):
         train_test_split(np.zeros((10, 1)), np.zeros(9))
+
+
+@pytest.mark.parametrize("seed", [0, 42, 123])
+@pytest.mark.parametrize("n, test_size", [
+    (10, 0.2),   # the reported case: 2 test rows, not 3
+    (10, 0.3),
+    (20, 0.25),
+    (7, 0.5),    # round(3.5) == 4 (round half to even)
+])
+def test_split_is_exact_partition(n, test_size, seed):
+    """Test set has round(n * test_size) rows; every row is in exactly one part."""
+    y = np.arange(n)
+    X = y.reshape(-1, 1).astype(float)
+    _, _, y_train, y_test = train_test_split(X, y, test_size=test_size, seed=seed)
+
+    assert len(y_test) == round(n * test_size)
+    # no overlap and nothing dropped or duplicated
+    assert sorted(np.concatenate([y_train, y_test]).tolist()) == y.tolist()

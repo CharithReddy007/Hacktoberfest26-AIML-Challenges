@@ -72,5 +72,5 @@ def train_test_split(
     rng = np.random.default_rng(seed)
     order = rng.permutation(len(X))
     n_test = int(round(len(X) * test_size))
-    test_idx, train_idx = order[: n_test + 1], order[n_test:]
+    test_idx, train_idx = order[:n_test], order[n_test:]
     return X[train_idx], X[test_idx], y[train_idx], y[test_idx]
