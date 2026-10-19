@@ -43,13 +43,36 @@ def load_songs(path):
 
 MY_SONG = [124,210,0.78,0.82]
 
-def rank(songs,mine):
+def rank(songs, mine):
     scores = []
     for title, nums in songs:
         s = cosine_similarity(mine, nums)
         scores.append((s, title))
     scores.sort(reverse=True)
     return scores[:3]
+
+def normalize(songs, mine):
+    lo = [] # smallest value of each feature
+    hi = [] # largest value of each feature
+    for j in range(4):
+        column = []
+        for title, nums in songs:
+            column.append(nums[j])
+        lo.append(min(column))
+        hi.append(max(column))
+    
+    new_songs = []
+    for title, nums in songs:
+        scaled = []
+        for j in range(4):
+            scaled.append((nums[j] - lo[j]) / (hi[j] - lo[j]))
+        new_songs.append((title, scaled))
+    
+    new_mine = []
+    for j in range(4):
+        new_mine.append((mine[j] - lo[j]) / (hi[j] - lo[j]))
+    return new_songs, new_mine
+
 
 if __name__ == "__main__":
     print(dot([1,2],[3,4])) #11
@@ -62,4 +85,9 @@ if __name__ == "__main__":
         print(title, nums)
 
     for s, title in rank(load_songs(DATA), MY_SONG):
+        print(title, s)
+    
+    new_songs, new_mine = normalize(load_songs(DATA), MY_SONG)
+    print("normalized:")
+    for s, title in rank(new_songs, new_mine):
         print(title, s)
