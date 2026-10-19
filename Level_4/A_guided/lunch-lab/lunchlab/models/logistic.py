@@ -27,7 +27,7 @@ def binary_cross_entropy(y: np.ndarray, p: np.ndarray) -> float:
     Probabilities are clipped to [1e-12, 1 - 1e-12] so the log never sees 0.
     """
     p = np.clip(p, EPS, 1 - EPS)
-    return float(-np.sum(y * np.log(p) + (1 - y) * np.log(1 - p)))
+    return float(-np.mean(y * np.log(p) + (1 - y) * np.log(1 - p)))
 
 
 class LogisticRegression:
