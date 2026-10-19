@@ -41,6 +41,16 @@ def load_songs(path):
 
         return songs
 
+MY_SONG = [124,210,0.78,0.82]
+
+def rank(songs,mine):
+    scores = []
+    for title, nums in songs:
+        s = cosine_similarity(mine, nums)
+        scores.append((s, title))
+    scores.sort(reverse=True)
+    return scores[:3]
+
 if __name__ == "__main__":
     print(dot([1,2],[3,4])) #11
     print(magnitude([3,4])) #5
@@ -50,3 +60,6 @@ if __name__ == "__main__":
 
     for title,nums in load_songs(DATA):
         print(title, nums)
+
+    for s, title in rank(load_songs(DATA), MY_SONG):
+        print(title, s)
