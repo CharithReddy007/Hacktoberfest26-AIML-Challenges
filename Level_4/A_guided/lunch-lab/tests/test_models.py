@@ -140,3 +140,20 @@ def test_knn_dict_round_trip():
 def test_model_from_dict_unknown_type_raises():
     with pytest.raises(ValueError):
         model_from_dict({"type": "nope"})
+
+
+def test_binary_cross_entropy_is_the_mean():
+    # hand calculation: -(ln 0.8 + ln 0.6) / 2 = 0.366985
+    y = np.array([1.0, 0.0])
+    p = np.array([0.8, 0.4])
+    assert binary_cross_entropy(y, p) == pytest.approx(0.366985, abs=1e-6)
+
+
+def test_first_loss_at_zero_weights_does_not_depend_on_n():
+    # all weights zero -> p = 0.5 -> loss = ln 2, however many lunches there are
+    X = np.zeros((2, 1))
+    y = np.array([1.0, 0.0])
+    small = LogisticRegression(lr=0, epochs=1, tol=0).fit(X, y)
+    large = LogisticRegression(lr=0, epochs=1, tol=0).fit(np.tile(X, (200, 1)), np.tile(y, 200))
+    assert small.loss_history_[0] == pytest.approx(np.log(2))
+    assert large.loss_history_[0] == pytest.approx(np.log(2))
